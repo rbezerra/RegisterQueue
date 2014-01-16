@@ -6,6 +6,7 @@
 package br.com.rbezerra.RegisterQueue.DAO;
 
 import com.mongodb.DB;
+import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoException;
@@ -35,12 +36,21 @@ public class Session {
         }
     }
 
-    public void getCollection() {
+    public void getCollections() {
         Set<String> colls = db.getCollectionNames();
 
         for (String s : colls) {
             System.out.println(s);
         }
+    }
+
+    public DBCollection getRegistroCollection() {
+        return this.conectaComColecao(REGISTROS);
+    }
+    
+    public DBCollection conectaComColecao(String coll){
+        DBCollection collection = db.getCollection(coll);
+        return collection;
     }
 
 }

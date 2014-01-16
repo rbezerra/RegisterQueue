@@ -10,12 +10,11 @@ import br.com.rbezerra.RegisterQueue.Models.Registro;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.WriteResult;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.apache.catalina.Session;
+
 
 /**
  *
@@ -27,8 +26,9 @@ public class DefaultRegistroDAO implements RegistroDAO {
 
     private DBCollection collectionReg;
 
-    public DefaultRegistroDAO(DBCollection collectionReg) {
-        this.collectionReg = collectionReg;
+    public DefaultRegistroDAO(Session session) {
+        
+        this.collectionReg = session.getRegistroCollection();
     }
 
     public void add(Registro reg) {
