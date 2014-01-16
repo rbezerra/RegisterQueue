@@ -3,7 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/RBezerra/Documents/NetBeansProjects/vraptor-blank-project/src/br/com/caelum/vraptor/blank/IndexController.java</file>
+            <file>file:/C:/Users/RBezerra/Documents/NetBeansProjects/RegisterQueue/src/br/com/rbezerra/RegisterQueue/IndexController.java</file>
+            <file>file:/C:/Users/RBezerra/Documents/NetBeansProjects/RegisterQueue/WebContent/WEB-INF/jsp/index/index.jsp</file>
+            <file>file:/C:/Users/RBezerra/Documents/NetBeansProjects/RegisterQueue/src/br/com/rbezerra/RegisterQueue/Models/Registro.java</file>
         </group>
     </open-files>
 </project-private>

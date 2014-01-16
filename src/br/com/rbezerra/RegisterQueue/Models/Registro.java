@@ -6,13 +6,19 @@
 
 package br.com.rbezerra.RegisterQueue.Models;
 
+import java.util.Date;
 import java.util.HashMap;
+
 
 /**
  *
  * @author RBezerra
  */
+
 public class Registro {
+    
+    
+    Date data;
     int caixasAtivos;
     int numClientes;
     HashMap<Integer, Integer> atendimentos; //<momento da entrada, tempo no caixa>
@@ -48,6 +54,14 @@ public class Registro {
 
     public void setAtendimentos(HashMap<Integer, Integer> atendimentos) {
         this.atendimentos = atendimentos;
+    }
+    
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
     }
     
     
