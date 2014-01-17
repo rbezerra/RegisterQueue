@@ -6,6 +6,7 @@
 
 package br.com.rbezerra.RegisterQueue.Models;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -21,7 +22,7 @@ public class Registro {
     Date data;
     int caixasAtivos;
     int numClientes;
-    HashMap<Integer, Integer> atendimentos; //<momento da entrada, tempo no caixa>
+    HashMap<Timestamp, Timestamp> atendimentos; //<momento da entrada, tempo no caixa>
     int numClientesEsp;
 
     public int getNumClientesEsp() {
@@ -48,11 +49,11 @@ public class Registro {
         this.numClientes = numClientes;
     }
 
-    public HashMap<Integer, Integer> getAtendimentos() {
+    public HashMap<Timestamp, Timestamp> getAtendimentos() {
         return atendimentos;
     }
 
-    public void setAtendimentos(HashMap<Integer, Integer> atendimentos) {
+    public void setAtendimentos(HashMap<Timestamp, Timestamp> atendimentos) {
         this.atendimentos = atendimentos;
     }
     
