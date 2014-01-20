@@ -27,6 +27,9 @@
                         removeCampos();
                         $("#numClientes").val("");
                         $("#numCaixasAtivos").val("");
+                        $("#resultado").find("p").contents().filter(function(){return this.nodeType === 3;}).remove();
+                        $("#horaChegada").val("");
+                        $("#tempAtendimento").val("");
                         elem.css("display", "none");
                         text.text("Inserir Horários");
                     } else {
@@ -82,7 +85,6 @@
 
                 for (var i = 0; i < n; i++) {
                     caixa = fila.dequeue();
-                    alert(caixa);
                     if (caixa > t[i] + 20) {
                         count++;
                     }
@@ -101,38 +103,38 @@
                 n = $("#numClientes").val();
                 $(".linhas").each(function() {
                     var linhas = $(this);
-                    
+
                     t.push(horaDeChegada2Number(linhas.find("#horaChegada").val()));
                     d.push(tempoDeAtendimento2Number(linhas.find("#tempAtendimento").val()));
 
                 });
                 var result = calcularNumClientesEsperando(c, n, t, d);
-                alert(result);
 
-                $("#resultado").val(result);
+
+                $("#resultado").find("p").append(result);
 
 
 
             }
             ;
-            
-            function horaDeChegada2Number(horaChegada){
+
+            function horaDeChegada2Number(horaChegada) {
                 //supondo que o horário comece as 9
                 var num;
                 var str_horaChegada = horaChegada.split(":");
-                var horas = str_horaChegada[0]-9;
+                var horas = str_horaChegada[0] - 9;
                 var minutos = str_horaChegada[1];
-                if(horas>0){
-                    horas = horas*60;
+                if (horas > 0) {
+                    horas = horas * 60;
                 }
-                num = parseInt(minutos)+parseInt(horas);
+                num = parseInt(minutos) + parseInt(horas);
                 return num;
-                
+
             }
-            
-            function tempoDeAtendimento2Number(tempAtendimento){
+
+            function tempoDeAtendimento2Number(tempAtendimento) {
                 var str_tempAtendimento = tempAtendimento.split(":");
-                return str_tempAtendimento[1];
+                return parseInt(str_tempAtendimento[1]);
             }
 
 
@@ -144,9 +146,10 @@
 
     <body>
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <form>
+            <form name="salvarForm" action="<c:url value='/adiciona/'/>" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+
                         <div class="form-group">
                             <div class="col-md-12">
                                 <label>
@@ -155,7 +158,7 @@
                                 </label>
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <input type="number" class="form-control" id="numCaixasAtivos">
+                                        <input type="number" class="form-control" id="numCaixasAtivos" name="numCaixasAtivos">
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +170,7 @@
                                 </label>
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <input type="number" class="form-control" id="numClientes">
+                                        <input type="number" class="form-control" id="numClientes" name="numClientes">
                                     </div>
                                 </div>
                             </div>
@@ -184,36 +187,36 @@
                                 <label>
                                     Quantidade de clientes com mais de 20 min. de espera
                                 </label>
-                                <div class="well col-md-4" id="resultado"><p></p></div>
+                                <div class="well col-md-4" id="resultado" name="resultado"><p></p></div>
                                 <br>
                                 <div class="col-md-2">
-                                    <a href="#" class="btn btn-default pull-right" id="salvarbtn">Salvar</a>
+                                    <a href="javascript:document.salvarForm.submit();" class="btn btn-default pull-right" id="salvarbtn">Salvar</a>
                                 </div>
 
                             </div>
                         </div>
-                    </form>
+
+                    </div>
+                    <div class="col-md-6" id="hashDiv" style="display: none;">
+                        <table border="0" cellpadding="2" cellspacing="4">
+                            <tr>
+                                <td><label>Hora de chegada</label></td>
+                                <td width="40"></td>
+                                <td><label>Tempo de Atendimento</label></td>
+                            </tr>
+
+                            <tr class="linhas">
+                                <td><input type="time" id="horaChegada" name="horaChegada[0]" class="form-control" placeholder="Hora de chegada"></td>
+                                <td width="40"></td>
+                                <td><input type="time" id="tempAtendimento" name="tempoAtend[0]" class="form-control" placeholder="Tempo de Atendimento"></td>
+                            </tr>
+
+                        </table>
+
+                        <a href="javascript:preparaCalc();" class="btn btn-default" id="processbtn" >Processar</a>
+                    </div>
                 </div>
-                <div class="col-md-6" id="hashDiv" style="display: none;">
-                    <table border="0" cellpadding="2" cellspacing="4">
-                        <tr>
-                            <td><label>Hora de chegada</label></td>
-                            <td width="40"></td>
-                            <td><label>Tempo de Atendimento</label></td>
-                        </tr>
-
-                        <tr class="linhas">
-                            <td><input type="time" id="horaChegada" name="horaChegada" class="form-control" placeholder="Hora de chegada"></td>
-                            <td width="40"></td>
-                            <td><input type="time" id="tempAtendimento" name="tempoAtend" class="form-control" placeholder="Tempo de Atendimento"></td>
-                        </tr>
-
-                    </table>
-
-                    <a href="javascript:preparaCalc();" class="btn btn-default" id="processbtn" >Processar</a>
-                </div>
-            </div>
-
+            </form>
         </div>
         <script type="text/javascript" src='<c:url value="/js/jquery-1.10.2.js"/>'></script>
         <script type="text/javascript" src='<c:url value="/js/bootstrap.js"/>'></script>

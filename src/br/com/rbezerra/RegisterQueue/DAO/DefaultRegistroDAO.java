@@ -24,7 +24,7 @@ import java.util.List;
 @Component
 public class DefaultRegistroDAO implements RegistroDAO {
 
-    private DBCollection collectionReg;
+    private final DBCollection collectionReg;
 
     public DefaultRegistroDAO(Session session) {
         

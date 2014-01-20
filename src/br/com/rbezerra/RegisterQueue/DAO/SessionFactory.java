@@ -17,7 +17,7 @@ import com.mongodb.MongoClientURI;
 @Component
 @ApplicationScoped
 public class SessionFactory implements ComponentFactory<Session> {
-    private static final String endereco = "mongodb://rbezerra:superfly90@ds027409.mongolab.com:27409/registerqueue";
+    private static final String endereco = "mongodb://regqueue:regqueue123@ds027409.mongolab.com:27409/";
     private final MongoClientURI uri = new MongoClientURI(endereco);
     
     public Session getInstance() {
