@@ -15,42 +15,127 @@
         <link href="./css/bootstrap.css" rel="stylesheet" media="screen">
         <link href="./css/simple-sidebar.css" rel="stylesheet" media="screen">
         <script language="javascript">
+
+
             function toggle(showHideDiv, switchTextDiv) {
-                var elem = $('#'+showHideDiv);
-                var text = $('#'+switchTextDiv);
+                var elem = $('#' + showHideDiv);
+                var text = $('#' + switchTextDiv);
                 var count = $("#numClientes").val();
-                if (elem.css("display") === "block") {
-                    removeCampos();
-                    $("#numClientes").val("");
-                    elem.css("display","none");
-                    text.text("Inserir Horários");
-                    
-                } else {
-                    for (var i = 1; i < count; i++) {
-                        clonarLinha();
+                var countCaixasAtivos = $("#numCaixasAtivos").val();
+                if (count > 0 && countCaixasAtivos > 0) {
+                    if (elem.css("display") === "block") {
+                        removeCampos();
+                        $("#numClientes").val("");
+                        $("#numCaixasAtivos").val("");
+                        elem.css("display", "none");
+                        text.text("Inserir Horários");
+                    } else {
+                        for (var i = 1; i < count; i++) {
+                            clonarLinha();
+                        }
+                        elem.css("display", "block");
+                        //elem.attr("id", elem.attr("id") + i);
+                        text.text("Apagar Horários");
                     }
-                    elem.css("display","block");
-                    text.text("Apagar Horários");
+                } else {
+                    alert("O número de caixas ativos e de clientes deve ser maior que zero");
                 }
 
 
             }
             ;
-
             function removeCampos() {
                 while ($(".linhas").length > 1) {
-                   $("tr.linhas:last").remove();
+                    $("tr.linhas:last").remove();
                 }
 
             }
             ;
-
             function clonarLinha() {
                 novoCampo = $("tr.linhas:first").clone();
                 novoCampo.find("input").val("");
                 novoCampo.insertAfter("tr.linhas:last");
             }
             ;
+            function FIFO() {
+                this.data = new Array();
+                this.push = function(element) {
+                    this.data.push(element);
+                };
+                this.pop = function() {
+                    return this.data.shift();
+                };
+                this.empty = function() {
+                    return this.data.length === 0;
+                };
+                this.enqueue = this.push;
+                this.dequeue = this.pop;
+            }
+            ;
+            function calcularNumClientesEsperando(c, n, t, d) {
+                var caixa, count;
+                var count = 0;
+                var fila = new FIFO();
+                for (var i = 0; i < c; i++) {
+                    fila.enqueue(0);
+                }
+
+                for (var i = 0; i < n; i++) {
+                    caixa = fila.dequeue();
+                    alert(caixa);
+                    if (caixa > t[i] + 20) {
+                        count++;
+                    }
+                    fila.enqueue(Math.max(t[i], caixa) + d[i]);
+                }
+
+                return count;
+            }
+            ;
+
+            function preparaCalc() {
+                var c, n, t, d;
+                t = new Array();
+                d = new Array();
+                c = $("#numCaixasAtivos").val();
+                n = $("#numClientes").val();
+                $(".linhas").each(function() {
+                    var linhas = $(this);
+                    
+                    t.push(horaDeChegada2Number(linhas.find("#horaChegada").val()));
+                    d.push(tempoDeAtendimento2Number(linhas.find("#tempAtendimento").val()));
+
+                });
+                var result = calcularNumClientesEsperando(c, n, t, d);
+                alert(result);
+
+                $("#resultado").val(result);
+
+
+
+            }
+            ;
+            
+            function horaDeChegada2Number(horaChegada){
+                //supondo que o horário comece as 9
+                var num;
+                var str_horaChegada = horaChegada.split(":");
+                var horas = str_horaChegada[0]-9;
+                var minutos = str_horaChegada[1];
+                if(horas>0){
+                    horas = horas*60;
+                }
+                num = parseInt(minutos)+parseInt(horas);
+                return num;
+                
+            }
+            
+            function tempoDeAtendimento2Number(tempAtendimento){
+                var str_tempAtendimento = tempAtendimento.split(":");
+                return str_tempAtendimento[1];
+            }
+
+
 
         </script>
 
@@ -99,7 +184,7 @@
                                 <label>
                                     Quantidade de clientes com mais de 20 min. de espera
                                 </label>
-                                <div class="well col-md-4"><p></p></div>
+                                <div class="well col-md-4" id="resultado"><p></p></div>
                                 <br>
                                 <div class="col-md-2">
                                     <a href="#" class="btn btn-default pull-right" id="salvarbtn">Salvar</a>
@@ -118,20 +203,21 @@
                         </tr>
 
                         <tr class="linhas">
-                            <td><input type="text" name="horaChegada[]" class="form-control" placeholder="Hora de chegada"></td>
+                            <td><input type="time" id="horaChegada" name="horaChegada" class="form-control" placeholder="Hora de chegada"></td>
                             <td width="40"></td>
-                            <td><input type="text" name="tempoAtend[]" class="form-control" placeholder="Tempo de Atendimento"></td>
+                            <td><input type="time" id="tempAtendimento" name="tempoAtend" class="form-control" placeholder="Tempo de Atendimento"></td>
                         </tr>
 
                     </table>
 
-                    <a href="#" class="btn btn-default" id="processbtn">Processar</a>
+                    <a href="javascript:preparaCalc();" class="btn btn-default" id="processbtn" >Processar</a>
                 </div>
             </div>
 
         </div>
         <script type="text/javascript" src='<c:url value="/js/jquery-1.10.2.js"/>'></script>
         <script type="text/javascript" src='<c:url value="/js/bootstrap.js"/>'></script>
+
     </body>
 
 </html>
